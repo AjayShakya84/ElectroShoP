@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart - ElectroShop</title>
+  <link rel="stylesheet" href="portfolio.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .cart-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 60vh;
+    }
+    
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 20px;
+    }
+    
+    .cart-item {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    
+    .cart-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    
+    .cart-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 20px;
+    }
+    
+    .cart-details {
+      flex: 1;
+      margin-right: 20px;
+    }
+    
+    .cart-details h3 {
+      margin: 0 0 10px 0;
+      color: #333;
+      font-size: 1.2em;
+    }
+    
+    .cart-details .price {
+      color: #007bff;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin: 5px 0;
+    }
+    
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .quantity-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .quantity-btn:hover {
+      background: #0056b3;
+    }
+    
+    .quantity-display {
+      background: #f8f9fa;
+      padding: 5px 15px;
+      border-radius: 5px;
+      font-weight: bold;
+      min-width: 40px;
+      text-align: center;
+    }
+    
+    .cart-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .remove-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    
+    .remove-btn:hover {
+      background: #c82333;
+    }
+    
+    .clear-cart-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .clear-cart-btn:hover {
+      background: #545b62;
+    }
+    
+    .cart-summary {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 10px;
+      padding: 25px;
+      margin-top: 30px;
+      text-align: center;
+    }
+    
+    .total-amount {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #28a745;
+      margin-bottom: 20px;
+    }
+    
+    .checkout-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    
+    .checkout-btn:hover {
+      background: #218838;
+    }
+    
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6c757d;
+    }
+    
+    .empty-cart i {
+      font-size: 4em;
+      margin-bottom: 20px;
+      color: #dee2e6;
+    }
+    
+    .continue-shopping {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+    }
+    
+    .continue-shopping:hover {
+      background: #0056b3;
+      text-decoration: none;
+      color: white;
+    }
+    
+    @media (max-width: 768px) {
+      .cart-item {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .cart-item img {
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+      
+      .cart-header {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ElectroShop</h1>
+    <nav>
+      <a href="portfolio.html">Home</a>
+      <a href="productpage.html">Products</a>
+      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+    </nav>
+  </header>
+
+  <div class="cart-container">
+    <div class="cart-header">
+      <h1><i class="fa-solid fa-shopping-cart"></i> Your Shopping Cart</h1>
+      <button class="clear-cart-btn" onclick="clearCart()" id="clear-btn" style="display: none;">
+        <i class="fa-solid fa-trash"></i> Clear Cart
+      </button>
+    </div>
+    
+    <div id="cart-items"></div>
+    
+    <div id="cart-summary" class="cart-summary" style="display: none;">
+      <div class="total-amount" id="total"></div>
+      <button class="checkout-btn" onclick="proceedToCheckout()">
+        <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
+      </button>
+    </div>
+  </div>
+
+  <script src="cartfunctionality.js"></script>
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartDiv = document.getElementById("cart-items");
+    let total = 0;
+
+    function displayCart() {
+      cartDiv.innerHTML = "";
+      total = 0;
+      
+      const clearBtn = document.getElementById("clear-btn");
+      const cartSummary = document.getElementById("cart-summary");
+
+      if (cart.length === 0) {
+        cartDiv.innerHTML = `
+          <div class="empty-cart">
+            <i class="fa-solid fa-shopping-cart"></i>
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added any items to your cart yet.</p>
+            <a href="productpage.html" class="continue-shopping">
+              <i class="fa-solid fa-arrow-left"></i> Continue Shopping
+            </a>
+          </div>
+        `;
+        clearBtn.style.display = "none";
+        cartSummary.style.display = "none";
+        return;
+      }
+
+      clearBtn.style.display = "block";
+      cartSummary.style.display = "block";
+
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        cartDiv.innerHTML += `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zNSA0MEg2NVY2MEgzNVY0MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPC9zdmc+Cg=='">
+            <div class="cart-details">
+              <h3>${item.name}</h3>
+              <div class="price">₹${item.price.toLocaleString()}</div>
+              <div class="quantity-controls">
+                <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+                <span class="quantity-display">${item.quantity}</span>
+                <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+              <div class="price">Subtotal: ₹${itemTotal.toLocaleString()}</div>
+            </div>
+            <div class="cart-actions">
+              <button class="remove-btn" onclick="removeFromCart(${index})">
+                <i class="fa-solid fa-trash"></i> Remove
+              </button>
+            </div>
+          </div>
+        `;
+        total += itemTotal;
+      });
+
+      document.getElementById("total").innerHTML = `
+        <i class="fa-solid fa-rupee-sign"></i> Total: ₹${total.toLocaleString()}
+      `;
+      
+      updateCartCount();
+    }
+
+    function updateQuantity(index, change) {
+      if (cart[index]) {
+        cart[index].quantity += change;
+        
+        if (cart[index].quantity <= 0) {
+          cart.splice(index, 1);
+        }
+        
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCart();
+        showNotification(change > 0 ? "Quantity increased" : "Quantity decreased");
+      }
+    }
+
+    function removeFromCart(index) {
+      if (confirm("Are you sure you want to remove this item from your cart?")) {
+        const itemName = cart[index].name;
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCart();
+        showNotification(itemName + " removed from cart");
+      }
+    }
+
+    function clearCart() {
+      if (confirm("Are you sure you want to clear your entire cart?")) {
+        cart = [];
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCart();
+        showNotification("Cart cleared successfully");
+      }
+    }
+
+    function proceedToCheckout() {
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+      
+      // Simple checkout simulation
+      const orderSummary = cart.map(item => 
+        `${item.name} x${item.quantity} = ₹${(item.price * item.quantity).toLocaleString()}`
+      ).join('\n');
+      
+      const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
+      if (confirm(`Order Summary:\n\n${orderSummary}\n\nTotal: ₹${totalAmount.toLocaleString()}\n\nProceed with order?`)) {
+        // Clear cart after successful order
+        cart = [];
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCart();
+        alert("Thank you for your order! Your items will be delivered soon.");
+      }
+    }
+
+    // Function to show notifications (if not already defined)
+    function showNotification(message) {
+      const existingNotification = document.querySelector('.notification');
+      if (existingNotification) {
+        existingNotification.remove();
+      }
+
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4CAF50;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+      `;
+
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Function to update cart count (if not already defined)
+    function updateCartCount() {
+      let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      
+      const cartIcon = document.querySelector('nav a[href="cart.html"]');
+      if (cartIcon) {
+        const existingCount = cartIcon.querySelector('.cart-count');
+        if (existingCount) {
+          existingCount.remove();
+        }
+        
+        if (totalItems > 0) {
+          const countSpan = document.createElement('span');
+          countSpan.className = 'cart-count';
+          countSpan.textContent = totalItems;
+          countSpan.style.cssText = `
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+            margin-left: 5px;
+            min-width: 18px;
+            text-align: center;
+          `;
+          cartIcon.appendChild(countSpan);
+        }
+      }
+    }
+
+    // Initialize cart display
+    displayCart();
+  </script>
+</body>
+</html>

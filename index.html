@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ElectroShop - Products</title>
+  <link rel="stylesheet" href="portfolio.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .products-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .products-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .products-header h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .products-header p {
+      color: #666;
+      font-size: 1.1em;
+    }
+    
+    .search-filter-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .search-box {
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 12px 40px 12px 15px;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    
+    .search-box input:focus {
+      border-color: #007bff;
+    }
+    
+    .search-box i {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+    }
+    
+    .category-filter {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .category-btn {
+      padding: 8px 16px;
+      border: 2px solid #007bff;
+      background: white;
+      color: #007bff;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+    
+    .category-btn.active,
+    .category-btn:hover {
+      background: #007bff;
+      color: white;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    
+    .product-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .product-card img {
+      width: 80rm;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .product-card h3 {
+      color: #333;
+      margin: 10px 0;
+      font-size: 1.3em;
+    }
+    
+    .product-card .price {
+      color: #007bff;
+      font-size: 1.4em;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    
+    .product-card .original-price {
+      color: #999;
+      text-decoration: line-through;
+      font-size: 1em;
+      margin-right: 10px;
+    }
+    
+    .product-card .description {
+      color: #666;
+      font-size: 0.9em;
+      margin: 10px 0;
+      line-height: 1.4;
+    }
+    
+    .product-card .features {
+      list-style: none;
+      padding: 0;
+      margin: 15px 0;
+      font-size: 0.85em;
+      color: #555;
+    }
+    
+    .product-card .features li {
+      margin: 5px 0;
+      padding-left: 15px;
+      position: relative;
+    }
+    
+    .product-card .features li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #28a745;
+      font-weight: bold;
+    }
+    
+    .product-card .rating {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      margin: 10px 0;
+    }
+    
+    .product-card .stars {
+      color: #ffc107;
+    }
+    
+    .product-card .rating-text {
+      color: #666;
+      font-size: 0.9em;
+    }
+    
+    .product-card button {
+      background: linear-gradient(45deg, #007bff, #0056b3);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s;
+      width: 100%;
+      margin-top: 15px;
+    }
+    
+    .product-card button:hover {
+      background: linear-gradient(45deg, #0056b3, #004085);
+      transform: translateY(-2px);
+    }
+    
+    .badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #ff4444;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+    
+    .badge.new {
+      background: #28a745;
+    }
+    
+    .badge.sale {
+      background: #ff4444;
+    }
+    
+    @media (max-width: 768px) {
+      .search-filter-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-box {
+        max-width: none;
+      }
+      
+      .category-filter {
+        justify-content: center;
+      }
+      
+      .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ElectroShop</h1>
+    <nav>
+      <a href="portfolio.html">Home</a>
+      <a href="productpage.html">Products</a>
+      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+    </nav>
+  </header>
+
+  <div class="products-container">
+    <div class="products-header">
+      <h1><i class="fa-solid fa-store"></i> Our Products</h1>
+      <p>Discover the latest electronics at unbeatable prices</p>
+    </div>
+    
+    <div class="search-filter-section">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
+        <i class="fa-solid fa-search"></i>
+      </div>
+      
+      <div class="category-filter">
+        <button class="category-btn active" onclick="filterProducts('all')">All</button>
+        <button class="category-btn" onclick="filterProducts('smartphones')">Smartphones</button>
+        <button class="category-btn" onclick="filterProducts('laptops')">Laptops</button>
+        <button class="category-btn" onclick="filterProducts('accessories')">Accessories</button>
+        <button class="category-btn" onclick="filterProducts('audio')">Audio</button>
+        <button class="category-btn" onclick="filterProducts('selinglights')">selinglights</button>
+      </div>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+      <!-- Smartphones -->
+      <div class="product-card" data-category="smartphones" data-name="samsung galaxy s23">
+        <div class="badge new">NEW</div>
+        <img src="https://media.tatacroma.com/Croma%20Assets/Communication/Mobiles/Images/268869_0_tsumml.png" alt="Samsung Galaxy S23">
+        <h3>Samsung Galaxy S23</h3>
+        <div class="rating">
+          <div class="stars">★★★★★</div>
+          <span class="rating-text">(4.8/5)</span>
+        </div>
+        <p class="price">₹45,000</p>
+        <p class="description">Latest Android smartphone with amazing camera and performance</p>
+        <ul class="features">
+          <li>6.1" Dynamic AMOLED Display</li>
+          <li>50MP Triple Camera System</li>
+          <li>8GB RAM, 256GB Storage</li>
+          <li>5G Ready</li>
+        </ul>
+        <button onclick="addToCart('Samsung Galaxy S23', 15000, 'samsung.png')">
+          <i class="fa-solid fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+
+      <div class="product-card" data-category="smartphones" data-name="iphone 14">
+        <div class="badge sale">SALE</div>
+        <img src="https://rukminim2.flixcart.com/image/480/640/xif0q/mobile/3/5/l/-original-imaghx9qmgqsk9s4.jpeg?q=90" alt="iPhone 14">
+        <h3>iPhone 14</h3>
+        <div class="rating">
+          <div class="stars">★★★★☆</div>
+          <span class="rating-text">(4.6/5)</span>
+        </div>
+        <p class="price">₹65,000 <span class="original-price">₹75,000</span></p>
+        <p class="description">Premium iOS experience with advanced features</p>
+        <ul class="features">
+          <li>6.1" Super Retina XDR Display</li>
+          <li>Dual 12MP Camera System</li>
+          <li>A15 Bionic Chip</li>
+          <li>Face ID Security</li>
+        </ul>
+        <button onclick="addToCart('iPhone 14', 65000, 'note 10.png')">
+          <i class="fa-solid fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+
+      <!-- Laptops -->
+      <div class="product-card" data-category="laptops" data-name="gaming laptop">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_XymmaUa91WSlvEGaM1SaLAeky67MTQKtcQ&s" alt="Gaming Laptop">
+        <h3>Gaming Laptop Pro</h3>
+        <div class="rating">
+          <div class="stars">★★★★★</div>
+          <span class="rating-text">(4.9/5)</span>
+        </div>
+        <p class="price">₹55,000</p>
+        <p class="description">High-performance laptop perfect for gaming and work</p>
+        <ul class="features">
+          <li>Intel i7 12th Gen Processor</li>
+          <li>16GB DDR4 RAM</li>
+          <li>RTX 3060 Graphics Card</li>
+          <li>1TB SSD Storage</li>
+        </ul>
+        <button onclick="addToCart('Gaming Laptop Pro', 55000, 'laptop.jpeg')">
+          <i class="fa-solid fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+
+      <div class="product-card" data-category="laptops" data-name="business laptop">
+        <img src="https://www.notebookcheck.net/fileadmin/_processed_/f/a/csm_HP_EliteBook_805_Series_PCs_Family_2_ff1e226fc6.jpg" alt="Business Laptop">
+        <h3>Business Laptop Elite</h3>
+        <div class="rating">
+          <div class="stars">★★★★☆</div>
+          <span class="rating-text">(4.4/5)</span>
+        </div>
+        <p class="price">₹35,000</p>
+        <p class="description">Lightweight and efficient for professional use</p>
+        <ul class="features">
+          <li>Intel i5 11th Gen Processor</li>
+          <li>8GB DDR4 RAM</li>
+          <li>512GB SSD Storage</li>
+          <li>14" Full HD Display</li>
+        </ul>
+        <button onclick="addToCart('Business Laptop Elite', 35000, 'laptop.jpeg')">
+          <i class="fa-solid fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+
+      <!-- Audio Products -->
+      <div class="product-card" data-category="audio" data-name="wireless headphones">
+        <div class="badge new">NEW</div>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8j-OnT-Rs5r93SogY33dU6mxszsSf3GOVjQ&s" alt="Wireless Headphones">
+        <h3>Wireless Headphones Pro</h3>
+        <div class="rating">
+          <div class="stars">★★★★★</div>
+          <span class="rating-text">(4.7/5)</span>
+        </div>
+        <p class="price">₹8,500</p>
+        <p class="description">Premium sound quality with noise cancellation</p>
+        <ul class="features">
+          <li>Active Noise Cancellation</li>
+          <li>30-hour Battery Life</li>
+          <li>Bluetooth 5.2</li>
+          <li>Quick Charge Support</li>
+        </ul>
+        <button onclick="addToCart('Wireless Headphones Pro', 8500, 'note 10.png')">
+          <i class="fa-solid fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+
+      <div class="product-card" data-category="audio" data-name="bluetooth speaker">
+        <img src="data:image/jpeg;base64,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" alt="Bluetooth Speaker">
+        <h3>Bluetooth Speaker Max</h3>
+        <div class="rating">
+          <div class="stars">★★★★☆</div>
+          <span class="rating-text">(4.3/5)</span>
+        </div>
+        <p class="price">₹4,200</p>
+        <p class="description">Portable speaker with powerful bass and clear sound</p>
+        <ul class="features">
+          <li>360° Surround Sound</li>
+          <li>Waterproof Design</li>
+          <li>12-hour Battery</li>
+          <li>Voice Assistant Support</li>
+        </ul>
+        <button onclick="addToCart('Bluetooth Speaker Max', 4200, 'laptop.jpeg')">
+          <i class="fa-solid fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+
+      <!-- Accessories -->
+      <div class="product-card" data-category="accessories" data-name="wireless charger">
+        <img src="https://www.boat-lifestyle.com/cdn/shop/files/15W_1500x.jpg?v=1725992063" alt="Wireless Charger">
+        <h3>Wireless Charger Pad</h3>
+        <div class="rating">
+          <div class="stars">★★★★☆</div>
+          <span class="rating-text">(4.2/5)</span>
+        </div>
+        <p class="price">₹1,800</p>
+        <p class="description">Fast wireless charging for compatible devices</p>
+        <ul class="features">
+          <li>15W Fast Charging</li>
+          <li>Universal Compatibility</li>
+          <li>LED Indicator</li>
+          <li>Compact Design</li>
+        </ul>
+        <button onclick="addToCart('Wireless Charger Pad', 1800, 'note 10.png')">
+          <i class="fa-solid fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+
+      <!--celinglight -->
+      <div class="product-card" data-category="celinglight" data-name="celinglight">
+        <img src="https://orientelectric.com/cdn/shop/files/backlite-trim-recess-panel-led-ceiling-light-orient-electric-1.png?v=1696835274" alt="celinglight">
+        <h3>celinglight</h3>
+        <div class="rating">
+          <div class="stars">★★★★☆</div>
+          <span class="rating-text">(4.2/5)</span>
+        </div>
+        <p class="price">₹250</p>
+        <p class="description">celinglight</p>
+        <ul class="features">
+          <li>15W </li>
+          <li>Three colour combination</li>
+          <li>LED Indicator</li>
+          
+        </ul>
+        <button onclick="addToCart('celinglight', 250, 'light.webp')">
+          <i class="fa-solid fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+
+
+      <div class="product-card" data-category="accessories" data-name="power bank">
+        <div class="badge sale">SALE</div>
+        <img src="data:image/jpeg;base64,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" alt="Power Bank">
+        <h3>Power Bank 20000mAh</h3>
+        <div class="rating">
+          <div class="stars">★★★★★</div>
+          <span class="rating-text">(4.8/5)</span>
+        </div>
+        <p class="price">₹2,500 <span class="original-price">₹3,200</span></p>
+        <p class="description">High-capacity portable charger with fast charging</p>
+        <ul class="features">
+          <li>20000mAh Capacity</li>
+          <li>Dual USB Output</li>
+          <li>Type-C Input/Output</li>
+          <li>Digital Display</li>
+        </ul>
+        <button onclick="addToCart('Power Bank 20000mAh', 2500, 'laptop.jpeg')">
+          <i class="fa-solid fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="cartfunctionality.js"></script>
+  <script>
+    // Search functionality
+    function searchProducts() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const products = document.querySelectorAll('.product-card');
+      
+      products.forEach(product => {
+        const productName = product.getAttribute('data-name').toLowerCase();
+        const productText = product.textContent.toLowerCase();
+        
+        if (productName.includes(searchTerm) || productText.includes(searchTerm)) {
+          product.style.display = 'block';
+        } else {
+          product.style.display = 'none';
+        }
+      });
+    }
+
+    // Category filter functionality
+    function filterProducts(category) {
+      const products = document.querySelectorAll('.product-card');
+      const buttons = document.querySelectorAll('.category-btn');
+      
+      // Update active button
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Filter products
+      products.forEach(product => {
+        if (category === 'all' || product.getAttribute('data-category') === category) {
+          product.style.display = 'block';
+        } else {
+          product.style.display = 'none';
+        }
+      });
+      
+      // Clear search when filtering
+      document.getElementById('searchInput').value = '';
+    }
+  </script>
+</body>
+</html>
